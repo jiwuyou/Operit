@@ -69,8 +69,10 @@
     <!-- Workflow scheduling permissions -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="com.termux.permission.RUN_COMMAND" />
 
     <queries>
+        <package android:name="com.termux" />
         <!-- 允许查询和绑定到无障碍服务提供者应用 -->
         <package android:name="com.ai.assistance.operit.provider" />
     </queries>
@@ -351,6 +353,10 @@
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
                 android:value="Keeps the user-requested assistant runtime alive for external HTTP control when no standard foreground service type fully describes that mode." />
         </service>
+
+        <receiver
+            android:name=".services.TermuxCommandResultReceiver"
+            android:exported="false" />
         
         <!-- 添加广播接收器配置 -->
         <receiver

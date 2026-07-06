@@ -40,6 +40,7 @@ import com.ai.assistance.operit.R
 import com.ai.assistance.operit.api.chat.AIForegroundService
 import com.ai.assistance.operit.core.application.OperitApplication
 import com.ai.assistance.operit.core.tools.AIToolHandler
+import com.ai.assistance.operit.core.tools.system.TermuxRunCommandClient
 import com.ai.assistance.operit.data.preferences.AgreementPreferences
 import com.ai.assistance.operit.data.preferences.DisplayPreferencesManager
 import com.ai.assistance.operit.data.preferences.UserPreferencesManager
@@ -132,6 +133,21 @@ class MainActivity : ComponentActivity() {
         } else {
             AppLogger.d(TAG, "通知权限被拒绝")
             Toast.makeText(this, getString(R.string.notification_permission_denied), Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private val termuxRunCommandPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            AppLogger.d(TAG, "Termux RUN_COMMAND 权限已授予")
+        } else {
+            AppLogger.d(TAG, "Termux RUN_COMMAND 权限被拒绝")
+            Toast.makeText(
+                this,
+                getString(R.string.termux_run_command_permission_denied),
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -441,6 +457,8 @@ class MainActivity : ComponentActivity() {
             // 1. 检查通知权限（Android 13+）
             checkNotificationPermission()
 
+            checkTermuxRunCommandPermission()
+
             // 2. 检查权限级别设置
             checkPermissionLevelSet()
 
@@ -627,6 +645,22 @@ class MainActivity : ComponentActivity() {
             // Android 13 以下不需要运行时通知权限
             AppLogger.d(TAG, "Android 版本 < 13，无需请求通知权限")
         }
+    }
+
+    private fun checkTermuxRunCommandPermission() {
+        if (!TermuxRunCommandClient.isPackageInstalled(this)) {
+            AppLogger.d(TAG, "Termux 未安装，跳过 RUN_COMMAND 权限请求")
+            return
+        }
+
+        val permission = TermuxRunCommandClient.runCommandPermission()
+        if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
+            AppLogger.d(TAG, "Termux RUN_COMMAND 权限已授予")
+            return
+        }
+
+        AppLogger.d(TAG, "请求 Termux RUN_COMMAND 权限")
+        termuxRunCommandPermissionLauncher.launch(permission)
     }
 
     // ======== 检查权限级别设置 ========

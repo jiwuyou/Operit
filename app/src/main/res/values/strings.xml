@@ -887,6 +887,7 @@
     <string name="notification_ai_reply_content">AI已完成回复</string>
     <string name="notification_permission_rationale">为了在AI完成回复后及时通知您，需要授予通知权限</string>
     <string name="notification_permission_denied">通知权限被拒绝，您将无法收到AI回复提醒</string>
+    <string name="termux_run_command_permission_denied">Termux 命令权限被拒绝，Operit 将无法调用 Termux 执行命令</string>
     <string name="settings_auto_accessibility">自动授予无障碍权限</string>
     <string name="settings_auto_accessibility_desc">关闭后需每次打开软件手动授权</string>
     
@@ -5719,6 +5720,7 @@
     <string name="toolreg_create_terminal_session_desc">创建或获取终端会话: %1$s</string>
     <string name="toolreg_execute_in_terminal_session_desc">在终端会话「%1$s」中执行: %2$s</string>
     <string name="toolreg_execute_hidden_terminal_command_desc">在隐藏终端执行器「%1$s」中执行: %2$s</string>
+    <string name="toolreg_execute_termux_command_desc">通过 Termux「%1$s」执行: %2$s</string>
     <string name="toolreg_close_terminal_session_desc">关闭终端会话: %1$s</string>
     <string name="toolreg_input_in_terminal_session_desc">向终端会话「%1$s」写入输入（control=%2$s）</string>
     <string name="toolreg_get_terminal_session_screen_desc">获取终端会话「%1$s」当前屏幕内容（单屏）</string>
@@ -7264,6 +7266,7 @@
     <string name="terminal_error_execute_command">执行终端命令时出错: %1$s</string>
     <string name="terminal_error_hidden_command_non_zero_exit">隐藏终端命令以非零状态退出（exitCode=%1$d）</string>
     <string name="terminal_error_execute_hidden_command">执行隐藏终端命令时出错: %1$s</string>
+    <string name="termux_error_execute_command">执行 Termux 命令时出错: %1$s</string>
     <string name="terminal_session_closed">终端会话 \'%1$s\' 已成功关闭。</string>
     <string name="terminal_error_close_session">关闭终端会话 \'%1$s\' 时出错: %2$s</string>
     <string name="terminal_error_missing_input_or_control">缺少参数: input 或 control（至少需要一个）</string>

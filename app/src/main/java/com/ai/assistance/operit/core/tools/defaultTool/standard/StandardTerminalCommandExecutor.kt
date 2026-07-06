@@ -7,6 +7,7 @@ import com.ai.assistance.operit.core.tools.*
 import com.ai.assistance.operit.data.model.AITool
 import com.ai.assistance.operit.data.model.ToolResult
 import com.ai.assistance.operit.core.tools.system.Terminal
+import com.ai.assistance.operit.core.tools.system.TermuxRunCommandClient
 import com.ai.assistance.operit.terminal.provider.type.HiddenExecResult
 import com.ai.assistance.operit.terminal.view.domain.ansi.TerminalChar
 import kotlinx.coroutines.*
@@ -408,6 +409,90 @@ class StandardTerminalCommandExecutor(private val context: Context) {
                     error =
                         context.getString(
                             R.string.terminal_error_execute_hidden_command,
+                            e.message ?: ""
+                        )
+                )
+            }
+        }
+    }
+
+    /** 通过外部 Termux/OpenHouseAI RunCommandService 执行命令 */
+    fun executeTermuxCommand(tool: AITool): ToolResult {
+        return runBlocking {
+            try {
+                val command = tool.parameters.find { it.name == "command" }?.value ?: ""
+                if (command.isBlank()) {
+                    return@runBlocking ToolResult(
+                        toolName = tool.name,
+                        success = false,
+                        result = StringResultData(""),
+                        error = context.getString(R.string.terminal_error_missing_command)
+                    )
+                }
+
+                val packageName =
+                    tool.parameters
+                        .find { it.name == "package_name" }
+                        ?.value
+                        ?.trim()
+                        ?.ifEmpty { TermuxRunCommandClient.DEFAULT_TERMUX_PACKAGE }
+                        ?: TermuxRunCommandClient.DEFAULT_TERMUX_PACKAGE
+                val workingDirectory =
+                    tool.parameters
+                        .find { it.name == "working_directory" }
+                        ?.value
+                        ?.trim()
+                        ?.takeIf { it.isNotEmpty() }
+                val timeoutMs =
+                    tool.parameters
+                        .find { it.name == "timeout_ms" }
+                        ?.value
+                        ?.toLongOrNull()
+                        ?: 120000L
+
+                val result =
+                    TermuxRunCommandClient.execute(
+                        context = context,
+                        command = command,
+                        packageName = packageName,
+                        workingDirectory = workingDirectory,
+                        timeoutMs = timeoutMs
+                    )
+
+                val isTermuxError =
+                    !result.timedOut && result.errCode != -1 && result.errmsg.isNotBlank()
+                val errorMessage =
+                    if (isTermuxError) {
+                        context.getString(R.string.termux_error_execute_command, result.errmsg)
+                    } else {
+                        null
+                    }
+
+                ToolResult(
+                    toolName = tool.name,
+                    success = errorMessage == null,
+                    result =
+                        TermuxCommandResultData(
+                            command = command,
+                            stdout = result.stdout,
+                            stderr = result.stderr,
+                            exitCode = result.exitCode,
+                            packageName = result.packageName,
+                            errCode = result.errCode,
+                            errmsg = result.errmsg,
+                            timedOut = result.timedOut
+                        ),
+                    error = errorMessage
+                )
+            } catch (e: Exception) {
+                AppLogger.e(TAG, "执行 Termux 命令时出错", e)
+                ToolResult(
+                    toolName = tool.name,
+                    success = false,
+                    result = StringResultData(""),
+                    error =
+                        context.getString(
+                            R.string.termux_error_execute_command,
                             e.message ?: ""
                         )
                 )

@@ -365,6 +365,20 @@ fun registerAllTools(handler: AIToolHandler, context: Context) {
     )
 
     handler.registerTool(
+            name = "execute_termux_command",
+            descriptionGenerator = { tool ->
+                val command = tool.parameters.find { it.name == "command" }?.value ?: ""
+                val packageName =
+                        tool.parameters.find { it.name == "package_name" }?.value ?: "com.termux"
+                s(R.string.toolreg_execute_termux_command_desc, packageName, command)
+            },
+            executor = { tool ->
+                val terminalTool = ToolGetter.getTerminalCommandExecutor(context)
+                terminalTool.executeTermuxCommand(tool)
+            }
+    )
+
+    handler.registerTool(
             name = "close_terminal_session",
             descriptionGenerator = { tool ->
                 val sessionId = tool.parameters.find { it.name == "session_id" }?.value

@@ -326,6 +326,44 @@ data class HiddenTerminalCommandResultData(
     }
 }
 
+/** Termux RUN_COMMAND 执行结果数据 */
+@Serializable
+data class TermuxCommandResultData(
+        val command: String,
+        val stdout: String,
+        val stderr: String,
+        val exitCode: Int,
+        val packageName: String,
+        val errCode: Int = -1,
+        val errmsg: String = "",
+        val timedOut: Boolean = false
+) : ToolResultData() {
+    override fun toString(): String {
+        val sb = StringBuilder()
+        sb.appendLine("Termux Command Execution Result:")
+        sb.appendLine("Package: $packageName")
+        sb.appendLine("Command: $command")
+        sb.appendLine("Exit Code: $exitCode")
+        if (errCode != -1 || errmsg.isNotBlank()) {
+            sb.appendLine("Termux Err Code: $errCode")
+        }
+        if (timedOut) {
+            sb.appendLine("Timed Out: true")
+        }
+        sb.appendLine("\nStdout:")
+        sb.appendLine(stdout)
+        if (stderr.isNotBlank()) {
+            sb.appendLine("\nStderr:")
+            sb.appendLine(stderr)
+        }
+        if (errmsg.isNotBlank()) {
+            sb.appendLine("\nTermux Error:")
+            sb.appendLine(errmsg)
+        }
+        return sb.toString()
+    }
+}
+
 /** 音乐播放结果数据 */
 @Serializable
 data class MusicPlaybackResultData(
