@@ -83,6 +83,87 @@ object SystemToolPrompts {
             )
         )
     )
+
+    // ==================== Termux 工具 ====================
+    val termuxTools = SystemToolPromptCategory(
+        categoryName = "Termux Tools",
+        tools = listOf(
+            ToolPrompt(
+                name = "execute_termux_command",
+                description = "Execute a command through the external Termux/OpenHouseAI app via the Termux RUN_COMMAND API. Use this when you specifically need the installed Termux user space instead of Operit's built-in terminal.",
+                parametersStructured =
+                    listOf(
+                        ToolParameterSchema(
+                            name = "command",
+                            type = "string",
+                            description = "shell command to execute with bash -lc",
+                            required = true
+                        ),
+                        ToolParameterSchema(
+                            name = "package_name",
+                            type = "string",
+                            description = "optional Termux package name",
+                            required = false,
+                            default = "com.termux"
+                        ),
+                        ToolParameterSchema(
+                            name = "working_directory",
+                            type = "string",
+                            description = "optional Termux working directory",
+                            required = false,
+                            default = "/data/data/com.termux/files/home"
+                        ),
+                        ToolParameterSchema(
+                            name = "timeout_ms",
+                            type = "integer",
+                            description = "optional timeout waiting for the Termux result PendingIntent in milliseconds",
+                            required = false,
+                            default = "120000"
+                        )
+                    )
+            )
+        )
+    )
+
+    val termuxToolsCn = SystemToolPromptCategory(
+        categoryName = "Termux 工具",
+        tools = listOf(
+            ToolPrompt(
+                name = "execute_termux_command",
+                description = "通过外部 Termux/OpenHouseAI 应用的 RUN_COMMAND API 执行命令。需要明确使用已安装的 Termux 用户空间，而不是 Operit 内置终端时使用。",
+                parametersStructured =
+                    listOf(
+                        ToolParameterSchema(
+                            name = "command",
+                            type = "string",
+                            description = "通过 bash -lc 执行的 shell 命令",
+                            required = true
+                        ),
+                        ToolParameterSchema(
+                            name = "package_name",
+                            type = "string",
+                            description = "可选，Termux 包名",
+                            required = false,
+                            default = "com.termux"
+                        ),
+                        ToolParameterSchema(
+                            name = "working_directory",
+                            type = "string",
+                            description = "可选，Termux 工作目录",
+                            required = false,
+                            default = "/data/data/com.termux/files/home"
+                        ),
+                        ToolParameterSchema(
+                            name = "timeout_ms",
+                            type = "integer",
+                            description = "可选，等待 Termux 结果 PendingIntent 的超时时间（毫秒）",
+                            required = false,
+                            default = "120000"
+                        )
+                    )
+            )
+        )
+    )
     
     // ==================== 文件系统工具 ====================
     val fileSystemTools = SystemToolPromptCategory(
@@ -538,6 +619,7 @@ object SystemToolPrompts {
 
         return listOf(
             basicTools,
+            termuxTools,
             adjustedFileSystemTools,
             httpTools,
             memoryTools
@@ -613,6 +695,7 @@ object SystemToolPrompts {
 
         return listOf(
             basicToolsCn,
+            termuxToolsCn,
             adjustedFileSystemTools,
             httpToolsCn,
             memoryToolsCn
@@ -664,9 +747,9 @@ object SystemToolPrompts {
 
     fun getManageableToolPrompts(useEnglish: Boolean): List<ManageableToolPrompt> {
         val baseCategories = if (useEnglish) {
-            listOf(basicTools, fileSystemTools, httpTools, memoryTools)
+            listOf(basicTools, termuxTools, fileSystemTools, httpTools, memoryTools)
         } else {
-            listOf(basicToolsCn, fileSystemToolsCn, httpToolsCn, memoryToolsCn)
+            listOf(basicToolsCn, termuxToolsCn, fileSystemToolsCn, httpToolsCn, memoryToolsCn)
         }
 
         return baseCategories
