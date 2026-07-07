@@ -16,9 +16,6 @@ class ExternalChatReceiver : BroadcastReceiver() {
     companion object {
         private const val TAG = "ExternalChatReceiver"
 
-        const val ACTION_EXTERNAL_CHAT = "com.ai.assistance.operit.EXTERNAL_CHAT"
-        const val ACTION_EXTERNAL_CHAT_RESULT = "com.ai.assistance.operit.EXTERNAL_CHAT_RESULT"
-
         const val EXTRA_REQUEST_ID = "request_id"
         const val EXTRA_MESSAGE = "message"
         const val EXTRA_GROUP = "group"
@@ -43,13 +40,13 @@ class ExternalChatReceiver : BroadcastReceiver() {
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action != ACTION_EXTERNAL_CHAT) return
+        if (intent.action != "${context.packageName}.EXTERNAL_CHAT") return
 
         val pending = goAsync()
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val replyAction = intent.getStringExtra(EXTRA_REPLY_ACTION)?.takeIf { it.isNotBlank() }
-                    ?: ACTION_EXTERNAL_CHAT_RESULT
+                    ?: "${context.packageName}.EXTERNAL_CHAT_RESULT"
                 val replyPackage = intent.getStringExtra(EXTRA_REPLY_PACKAGE)?.takeIf { it.isNotBlank() }
                 val result = ExternalChatRequestExecutor(context.applicationContext).execute(
                     ExternalChatRequest(
@@ -77,7 +74,7 @@ class ExternalChatReceiver : BroadcastReceiver() {
             } catch (e: Exception) {
                 AppLogger.e(TAG, "Failed to handle external chat", e)
                 val replyAction = intent.getStringExtra(EXTRA_REPLY_ACTION)?.takeIf { it.isNotBlank() }
-                    ?: ACTION_EXTERNAL_CHAT_RESULT
+                    ?: "${context.packageName}.EXTERNAL_CHAT_RESULT"
                 val replyPackage = intent.getStringExtra(EXTRA_REPLY_PACKAGE)?.takeIf { it.isNotBlank() }
                 sendResultBroadcast(
                     context = context,

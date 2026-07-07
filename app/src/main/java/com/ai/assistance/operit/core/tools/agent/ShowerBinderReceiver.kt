@@ -10,7 +10,7 @@ import com.ai.assistance.shower.ShowerBinderContainer
 class ShowerBinderReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action != ACTION_SHOWER_BINDER_READY) {
+        if (intent.action != "${context.packageName}.action.SHOWER_BINDER_READY") {
             return
         }
         val container = intent.getParcelableExtra<ShowerBinderContainer>(EXTRA_BINDER_CONTAINER)
@@ -23,7 +23,6 @@ class ShowerBinderReceiver : BroadcastReceiver() {
 
     companion object {
         private const val TAG = "ShowerBinderReceiver"
-        const val ACTION_SHOWER_BINDER_READY = "com.ai.assistance.operit.action.SHOWER_BINDER_READY"
         const val EXTRA_BINDER_CONTAINER = "binder_container"
     }
 }

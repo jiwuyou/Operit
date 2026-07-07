@@ -92,13 +92,13 @@ adb shell am broadcast \
 
 如果你的工作流 Trigger 里 `action` 配置的是默认值：
 
-- `com.ai.assistance.operit.TRIGGER_WORKFLOW`
+- `com.wuxianc.operit.TRIGGER_WORKFLOW`
 
 那么可以使用：
 
 ```bash
 adb shell am broadcast \
-  -a com.ai.assistance.operit.TRIGGER_WORKFLOW \
+  -a com.wuxianc.operit.TRIGGER_WORKFLOW \
   --es message "hello" \
   --es request_id "req-1002"
 ```

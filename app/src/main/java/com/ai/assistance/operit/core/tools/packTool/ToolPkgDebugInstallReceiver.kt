@@ -14,14 +14,13 @@ class ToolPkgDebugInstallReceiver : BroadcastReceiver() {
     companion object {
         private const val TAG = "ToolPkgDebugInstallReceiver"
 
-        const val ACTION_DEBUG_INSTALL_TOOLPKG = "com.ai.assistance.operit.DEBUG_INSTALL_TOOLPKG"
         const val EXTRA_PACKAGE_NAME = "package_name"
         const val EXTRA_FILE_PATH = "file_path"
         const val EXTRA_RESET_SUBPACKAGE_STATES = "reset_subpackage_states"
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action != ACTION_DEBUG_INSTALL_TOOLPKG) {
+        if (intent.action != "${context.packageName}.DEBUG_INSTALL_TOOLPKG") {
             return
         }
 

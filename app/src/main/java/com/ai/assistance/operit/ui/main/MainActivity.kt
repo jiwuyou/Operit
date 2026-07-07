@@ -73,10 +73,6 @@ import com.ai.assistance.operit.widget.ToolPkgDesktopWidgetHost
 import org.json.JSONObject
 
 class MainActivity : ComponentActivity() {
-    companion object {
-        const val ACTION_OPEN_SETTINGS_SHORTCUT = "com.ai.assistance.operit.action.OPEN_SETTINGS_SHORTCUT"
-    }
-
     private val TAG = "MainActivity"
 
     // ======== 屏幕方向变更状态 ========
@@ -290,7 +286,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun handleIntent(intent: Intent?): Boolean {
-        if (intent?.action == ACTION_OPEN_SETTINGS_SHORTCUT) {
+        if (intent?.action == "$packageName.action.OPEN_SETTINGS_SHORTCUT") {
             pendingShortcutNavItem = NavItem.Settings
             pendingShortcutRequestId = System.currentTimeMillis()
             currentMainNavItem = NavItem.Settings

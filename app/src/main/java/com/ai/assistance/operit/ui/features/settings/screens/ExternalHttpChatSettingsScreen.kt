@@ -113,17 +113,19 @@ curl -X POST "$sampleBaseUrl/api/external-chat" \
     val healthCurl = remember(sampleBaseUrl, curlToken) {
         "curl -H \"Authorization: Bearer $curlToken\" \"$sampleBaseUrl/api/health\""
     }
-    val intentOverview = remember(context) {
+    val externalChatIntentAction = "${context.packageName}.EXTERNAL_CHAT"
+    val externalChatResultAction = "${context.packageName}.EXTERNAL_CHAT_RESULT"
+    val intentOverview = remember(context, externalChatIntentAction, externalChatResultAction) {
         context.getString(
             R.string.external_http_chat_intent_overview,
-            EXTERNAL_CHAT_INTENT_ACTION,
-            EXTERNAL_CHAT_RESULT_ACTION
+            externalChatIntentAction,
+            externalChatResultAction
         )
     }
-    val intentAdbExample = remember {
+    val intentAdbExample = remember(externalChatIntentAction) {
         """
 adb shell am broadcast \
-  -a $EXTERNAL_CHAT_INTENT_ACTION \
+  -a $externalChatIntentAction \
   --es request_id "req-001" \
   --es message "你好" \
   --ez show_floating true \
@@ -479,9 +481,6 @@ adb shell am broadcast \
         }
     }
 }
-
-private const val EXTERNAL_CHAT_INTENT_ACTION = "com.ai.assistance.operit.EXTERNAL_CHAT"
-private const val EXTERNAL_CHAT_RESULT_ACTION = "com.ai.assistance.operit.EXTERNAL_CHAT_RESULT"
 
 @Composable
 private fun SettingsCard(

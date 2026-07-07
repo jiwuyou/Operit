@@ -19,14 +19,13 @@ class WorkflowTaskerReceiver : BroadcastReceiver() {
 
     companion object {
         private const val TAG = "WorkflowTaskerReceiver"
-        const val ACTION_TRIGGER_WORKFLOW = "com.ai.assistance.operit.TRIGGER_WORKFLOW"
         
         /**
          * Creates an intent to trigger workflows based on intent data.
          * This can be used by other parts of the app or external apps to trigger a check.
          */
         fun createTriggerIntent(context: Context, extras: Bundle? = null): Intent {
-            return Intent(ACTION_TRIGGER_WORKFLOW).apply {
+            return Intent("${context.packageName}.TRIGGER_WORKFLOW").apply {
                 setPackage(context.packageName)
                 extras?.let { putExtras(it) }
             }
@@ -99,4 +98,3 @@ class WorkflowBootReceiver : BroadcastReceiver() {
         }
     }
 }
-

@@ -14,12 +14,11 @@ class PackageDebugRefreshReceiver : BroadcastReceiver() {
     companion object {
         private const val TAG = "PackageDebugRefreshReceiver"
 
-        const val ACTION_DEBUG_REFRESH_PACKAGES = "com.ai.assistance.operit.DEBUG_REFRESH_PACKAGES"
         const val EXTRA_REACTIVATE_ACTIVE_PACKAGES = "reactivate_active_packages"
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action != ACTION_DEBUG_REFRESH_PACKAGES) {
+        if (intent.action != "${context.packageName}.DEBUG_REFRESH_PACKAGES") {
             return
         }
 

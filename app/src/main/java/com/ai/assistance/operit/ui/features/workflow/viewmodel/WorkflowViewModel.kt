@@ -407,7 +407,7 @@ class WorkflowViewModel(application: Application) : AndroidViewModel(application
             name = context.getString(R.string.workflow_trigger_intent),
             triggerType = "intent",
             triggerConfig = mapOf(
-                "action" to "com.ai.assistance.operit.TRIGGER_WORKFLOW"
+                "action" to "${context.packageName}.TRIGGER_WORKFLOW"
             ),
             position = templateNodePosition(0)
         )

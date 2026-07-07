@@ -24,7 +24,6 @@ class ScriptExecutionReceiver : BroadcastReceiver() {
     companion object {
         private const val TAG = "ScriptExecutionReceiver"
 
-        const val ACTION_EXECUTE_JS = "com.ai.assistance.operit.EXECUTE_JS"
         const val EXTRA_EXECUTION_MODE = "execution_mode"
         const val EXTRA_FILE_PATH = "file_path"
         const val EXTRA_CODE_TEXT = "code_text"
@@ -43,7 +42,7 @@ class ScriptExecutionReceiver : BroadcastReceiver() {
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action != ACTION_EXECUTE_JS) {
+        if (intent.action != "${context.packageName}.EXECUTE_JS") {
             return
         }
 

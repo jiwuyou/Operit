@@ -14,11 +14,11 @@ class ToolPkgComposeDslDebugDumpReceiver : BroadcastReceiver() {
     companion object {
         private const val TAG = "ToolPkgComposeDslDebugDumpReceiver"
 
-        const val ACTION_DUMP_COMPOSE_DSL_UI = "com.ai.assistance.operit.DUMP_COMPOSE_DSL_UI"
+        fun actionDumpComposeDslUi(context: Context): String = "${context.packageName}.DUMP_COMPOSE_DSL_UI"
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action != ACTION_DUMP_COMPOSE_DSL_UI) {
+        if (intent.action != actionDumpComposeDslUi(context)) {
             return
         }
 
